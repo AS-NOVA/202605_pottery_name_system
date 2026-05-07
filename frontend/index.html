@@ -3,30 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>彩陶智能体检系统</title>
+    <title>彩陶智能命名系统</title>
     <!-- 引入 Tailwind CSS，免去写独立 CSS 文件的烦恼 -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-stone-100 min-h-screen p-8 text-gray-800 font-sans">
+    <!-- 最外层容器 -->
     <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-stone-200">
+        <!-- 标题 -->
         <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">彩陶智能体检与命名分析系统</h1>
-
+        <!-- 双栏布局：左侧输入区，右侧结果展示区 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             <!-- ================= 左侧：信息输入区 ================= -->
-            <div>
+            <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                <!-- 左侧标题 -->
                 <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">1. 输入多源信息</h2>
+                <!-- 左侧表单：图片上传 + 结构化信息 + 描述文本 -->
                 <form id="potteryForm" class="space-y-4">
-                    <!-- 图片上传 -->
+                    <!-- 1图片上传区 -->
                     <div>
                         <label class="block text-sm font-medium mb-1 text-gray-600">图片上传</label>
-                        <input type="file" id="imageInput" class="w-full border rounded-md p-2 text-sm bg-stone-50">
+                        <!-- <input type="file" id="imageInput" class="w-full border rounded-md p-2 text-sm bg-stone-50"> -->
+                         <!-- 隐藏原生文件输入 -->
+                        <input type="file" id="imageInput" accept="image/*" class="hidden" />
+
+                        <!-- 自定义上传区域（点击触发 input） -->
+                        <label
+                        for="imageInput"
+                        class="flex items-center justify-center w-full h-48 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer bg-stone-50 hover:bg-stone-100 transition overflow-hidden"
+                        >
+                        <!-- 占位文字 -->
+                        <span id="uploadPlaceholder" class="text-stone-400 text-sm">
+                            📷 点击上传图片
+                        </span>
+
+                        <!-- 图片预览（默认隐藏） -->
+                        <img
+                            id="previewImage"
+                            class="hidden object-contain w-full h-full"
+                            alt="预览图片"
+                        />
+                        </label>
                     </div>
-                    <!-- 原参考名 (核心靶子) -->
+                    <!-- 2原参考名 -->
                     <div>
                         <label class="block text-sm font-medium mb-1 text-gray-600">原参考名 (待核查靶子)</label>
                         <input type="text" id="originalName" placeholder="例如：马家窑文化黑彩网格纹壶" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
                     </div>
-                    <!-- 结构化信息 -->
+                    <!-- 3结构化信息 -->
                     <div class="flex gap-4">
                         <div class="flex-1">
                             <label class="block text-sm font-medium mb-1 text-gray-600">结构化：时代</label>
@@ -44,12 +68,12 @@
                             </select>
                         </div>
                     </div>
-                    <!-- 描述 -->
+                    <!-- 4描述 -->
                     <div>
                         <label class="block text-sm font-medium mb-1 text-gray-600">文字描述 (补充材质、外形等)</label>
                         <textarea id="description" rows="3" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none"></textarea>
                     </div>
-                    
+                    <!-- 提交按钮 -->
                     <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-md hover:bg-orange-700 transition duration-200 shadow-md">
                         开始体检分析
                     </button>
@@ -58,9 +82,10 @@
 
             <!-- ================= 右侧：结果展示区 ================= -->
             <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+                <!-- 右侧标题 -->
                 <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">2. 体检报告与解析</h2>
                 
-                <!-- 预留的容器，我们将用 JS 在这里“画圈” -->
+                <!-- 1成分拆解 -->
                 <div class="mb-6">
                     <h3 class="text-sm font-medium text-gray-500 mb-3">成分拆解视图：</h3>
                     <div id="tagsContainer" class="flex flex-wrap gap-2 min-h-[40px]">
@@ -68,11 +93,11 @@
                     </div>
                 </div>
 
-                <!-- 冲突警告区 (默认隐藏) -->
+                <!-- 2冲突警告区 (默认隐藏) -->
                 <div id="conflictBox" class="hidden mb-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm font-medium">
                 </div>
 
-                <!-- 最终建议命名 -->
+                <!-- 3最终建议命名 -->
                 <div>
                     <h3 class="text-sm font-medium text-gray-500 mb-1">系统建议命名：</h3>
                     <div id="suggestedName" class="text-2xl font-bold text-gray-800 bg-white p-3 border rounded-md shadow-sm">
@@ -82,6 +107,7 @@
             </div>
         </div>
     </div>
-     <script src="app.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/upload.js"></script> 
 </body>
 </html>
