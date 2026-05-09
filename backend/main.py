@@ -1,6 +1,8 @@
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
+from schemas import AnalyzeResponse, ElementAnalysis, ElementStatusType
+from typing import Optional
 
 # ==========================================
 # 1. 基础配置与目录初始化
@@ -12,12 +14,12 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 LOGS_DIR.mkdir(exist_ok=True)
 
 # 初始化 FastAPI 实例
-app = FastAPI(title="彩陶命名体检系统 (MVP)")
+app = FastAPI(title="彩陶智能命名系统")
 
-# 配置 CORS跨域（极其重要，否则前端 fetch 会被浏览器拦截）
+# 配置 CORS跨域
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # MVP阶段允许所有来源，方便本地开发
+    allow_origins=["*"],  # 暂时允许所有来源，方便本地开发
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,34 +27,35 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"message": "彩陶系统后端已启动，工作目录就绪。"}
+    return {"message": "后端已启动"}
 
 # ==========================================
-# 2. 核心路由：多模态体检与命名分析 (Mock版)
+# 2. 核心接口：分析与命名建议
 # ==========================================
 
 @app.post("/api/analyze")
 async def analyze_pottery(
-    original_name: str = Form(""),
-    description: str = Form(""),
-    era: str = Form(""),
-    culture: str = Form(""),
-    image: UploadFile = File(None)
+    image: Optional[UploadFile] = File(None),
+    description: Optional[str] = Form(None),
+    structured_data: Optional[str] = Form(None),
+    original_name: Optional[str] = Form(""),
 ):
-    # 这是 Day 1 的造假逻辑：无论前端传什么，我们都返回固定的结构
-    # 目的是先让前端能拿到数据，把“画圈”的UI效果做出来
-    return {
-        "status": "success",
-        "data": {
-            "slots": {
-                "时代": era if era else "新石器时代",
-                "文化": culture if culture else "马家窑文化",
-                "材质/色彩": "黑彩",
-                "纹饰": "网格纹",
-                "器形": "双耳壶",
-                "类型": "半山类型"
-            },
-            "conflict_warning": "假装做了一次冲突检测：当前各项特征匹配正常，无明显冲突。",
-            "suggested_name": f"{era if era else '新石器时代'}{culture if culture else '马家窑文化'}黑彩网格纹双耳壶"
-        }
-    }
+
+    # 这里我们先返回一个模拟的结果，方便前端开发和接口联调
+    # {
+    #   "era": { "origin": "新石器时代", "new": null, "type": "UNVERIFIED" },
+    #   "culture": { "origin": "仰韶文化", "new": "仰韶文化", "type": "MATCH" },
+    #   "pattern": { "origin": null, "new": "几何纹", "type": "ADDED" },
+    #   "material": { "origin": "彩陶", "new": "彩陶", "type": "MATCH" },
+    #   "shape": { "origin": null, "new": null, "type": "EMPTY" },
+    #   "shape_type": { "origin": "盘", "new": "盆", "type": "MISMATCH" }
+    # }
+
+    return AnalyzeResponse(
+        era=ElementAnalysis(origin="新石器时代", new=None, type=ElementStatusType.UNVERIFIED),
+        culture=ElementAnalysis(origin="仰韶文化", new="仰韶文化", type=ElementStatusType.MATCH),
+        pattern=ElementAnalysis(origin=None, new="几何纹", type=ElementStatusType.ADDED),
+        material=ElementAnalysis(origin="彩陶", new="彩陶", type=ElementStatusType.MATCH),
+        shape=ElementAnalysis(origin=None, new=None, type=ElementStatusType.EMPTY),
+        shape_type=ElementAnalysis(origin="盘", new="盆", type=ElementStatusType.MISMATCH)
+    )

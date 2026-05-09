@@ -47,25 +47,31 @@
                     </div>
                     <!-- 2原参考名 -->
                     <div>
-                        <label class="block text-sm font-medium mb-1 text-gray-600">原参考名 (待核查靶子)</label>
+                        <label class="block text-sm font-medium mb-1 text-gray-600">原参考名</label>
                         <input type="text" id="originalName" placeholder="例如：马家窑文化黑彩网格纹壶" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
                     </div>
                     <!-- 3结构化信息 -->
                     <div class="flex gap-4">
                         <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1 text-gray-600">结构化：时代</label>
+                            <label class="block text-sm font-medium mb-1 text-gray-600">时代</label>
+                            <input type="text" id="eraInput" placeholder="例如：新石器时代" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
+                            <!--
                             <select id="eraSelect" class="w-full border rounded-md p-2 text-sm bg-white">
                                 <option value="">(空)</option>
                                 <option value="新石器时代晚期">新石器时代晚期</option>
                             </select>
+                            -->
                         </div>
                         <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1 text-gray-600">结构化：文化</label>
+                            <label class="block text-sm font-medium mb-1 text-gray-600">文化</label>
+                            <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
+                            <!--
                             <select id="cultureSelect" class="w-full border rounded-md p-2 text-sm bg-white">
                                 <option value="">(空)</option>
                                 <option value="仰韶文化">仰韶文化</option>
                                 <option value="马家窑文化">马家窑文化</option>
                             </select>
+                            -->
                         </div>
                     </div>
                     <!-- 4描述 -->
@@ -75,7 +81,7 @@
                     </div>
                     <!-- 提交按钮 -->
                     <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-md hover:bg-orange-700 transition duration-200 shadow-md">
-                        开始体检分析
+                        命名检查与建议
                     </button>
                 </form>
             </div>
@@ -85,24 +91,10 @@
                 <!-- 右侧标题 -->
                 <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">2. 体检报告与解析</h2>
                 
-                <!-- 1成分拆解 -->
-                <div class="mb-6">
-                    <h3 class="text-sm font-medium text-gray-500 mb-3">成分拆解视图：</h3>
-                    <div id="tagsContainer" class="flex flex-wrap gap-2 min-h-[40px]">
-                        <span class="text-stone-400 text-sm italic mt-1">等待分析数据...</span>
-                    </div>
-                </div>
-
-                <!-- 2冲突警告区 (默认隐藏) -->
-                <div id="conflictBox" class="hidden mb-6 p-4 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm font-medium">
-                </div>
-
-                <!-- 3最终建议命名 -->
-                <div>
-                    <h3 class="text-sm font-medium text-gray-500 mb-1">系统建议命名：</h3>
-                    <div id="suggestedName" class="text-2xl font-bold text-gray-800 bg-white p-3 border rounded-md shadow-sm">
-                        暂无
-                    </div>
+                <!-- 显示结果 -->
+                <div id="analysisResult" class="space-y-4">
+                    <!-- 这里的内容将由 JavaScript 动态生成 -->
+                    <p class="text-stone-500 italic">请上传图片并填写信息后，点击“命名检查与建议”按钮查看分析结果。</p>
                 </div>
             </div>
         </div>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩陶命名六要素展示</title>
+    <style>
+        /* 基础页面样式 */
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            background-color: #f9f8f6; /* 略带复古感的背景色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* 核心展示区域容器 */
+        .pottery-name-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px; /* 控制各个要素之间的间距 */
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* 单个要素的容器 */
+        .element-box {
+            display: flex;
+            flex-direction: column;
+            color: #3b2818; /* 提取自你图片的深褐色，符合彩陶主题 */
+        }
+
+        /* 要素的标签（如：年代） */
+        .element-label {
+            font-size: 16px;
+            margin-bottom: 2px;
+            margin-left: 4px; /* 让标签稍微向内缩进一点，对齐边框内侧 */
+            letter-spacing: 1px;
+        }
+
+        /* 要素的值（如：新石器时代） */
+        .element-value {
+            font-size: 32px; /* 突出显示具体内容 */
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 2px solid #3b2818;
+            border-radius: 10px; /* 圆角边框，贴合图片参考 */
+            background-color: transparent;
+            line-height: 1.2;
+        }
+        
+        /* 添加一个连接符样式（可选，用于视觉过渡） */
+        .plus-sign {
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 15px;
+            font-size: 24px;
+            color: #8c7361;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 容器：JS将把渲染好的元素注入到这里 -->
+    <div class="pottery-name-container" id="nameContainer">
+        <!-- 动态内容将在此处生成 -->
+    </div>
+
+    <script>
+        // 1. 定义数据结构：六要素拆解结果
+        // 这一步模拟了未来你从 FastAPI 后端接收到的 JSON 数据格式
+        const potteryData = [
+            { label: "年代", value: "新石器时代" },
+            { label: "文化", value: "大汶口文化" },
+            { label: "纹饰", value: "漩涡纹" },
+            { label: "材质", value: "彩陶" },
+            { label: "外形", value: "单耳" },
+            { label: "通称", value: "杯" }
+        ];
+
+        // 2. 获取容器节点
+        const container = document.getElementById('nameContainer');
+
+        // 3. 遍历数据并动态生成 DOM
+        potteryData.forEach((item, index) => {
+            // 创建单个要素的外层 div
+            const boxDiv = document.createElement('div');
+            boxDiv.className = 'element-box';
+
+            // 创建标签 div
+            const labelDiv = document.createElement('div');
+            labelDiv.className = 'element-label';
+            labelDiv.textContent = item.label;
+
+            // 创建数值 div
+            const valueDiv = document.createElement('div');
+            valueDiv.className = 'element-value';
+            valueDiv.textContent = item.value;
+
+            // 组装并挂载
+            boxDiv.appendChild(labelDiv);
+            boxDiv.appendChild(valueDiv);
+            container.appendChild(boxDiv);
+
+            // 如果不是最后一个元素，可以在中间加个加号（如果你需要完全分开展示，可以注释掉这段）
+            // if (index < potteryData.length - 1) {
+            //     const plusDiv = document.createElement('div');
+            //     plusDiv.className = 'plus-sign';
+            //     plusDiv.textContent = '+';
+            //     container.appendChild(plusDiv);
+            // }
+        });
+    </script>
+</body>
+</html>
