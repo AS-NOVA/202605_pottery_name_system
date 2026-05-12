@@ -1,62 +1,6 @@
 <mxfile host="65bd71144e">
-    <diagram id="q8GxMIz54-Td6BBLf_oh" name="六要素间可能存在的冲突关系">
-        <mxGraphModel dx="873" dy="766" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
-            <root>
-                <mxCell id="0"/>
-                <mxCell id="1" parent="0"/>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-1" value="年代&lt;div&gt;（新石器为主）&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="50" y="170" width="80" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-2" value="文化" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="170" y="170" width="60" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-3" value="纹饰" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="170" y="90" width="60" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-4" value="材质" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="170" y="250" width="60" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-5" value="外形" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="370" y="170" width="60" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-6" value="器型&lt;div&gt;通称&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
-                    <mxGeometry x="270" y="170" width="60" height="40" as="geometry"/>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-10" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-1" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="180" y="80" as="sourcePoint"/>
-                        <mxPoint x="230" y="30" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-11" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-6" target="OqACN1Rbr2dCTbYdbtUj-5" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="431" y="-20" as="sourcePoint"/>
-                        <mxPoint x="481" y="-70" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-12" value="" style="endArrow=classic;startArrow=classic;html=1;dashed=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-3" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="190" y="150" as="sourcePoint"/>
-                        <mxPoint x="240" y="40" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-14" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-4" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="170" y="280" as="sourcePoint"/>
-                        <mxPoint x="220" y="230" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="OqACN1Rbr2dCTbYdbtUj-15" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-6" edge="1">
-                    <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="210" y="320" as="sourcePoint"/>
-                        <mxPoint x="260" y="270" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-            </root>
-        </mxGraphModel>
-    </diagram>
     <diagram id="OYjqh9VMKTc3II8-1AsA" name="整体逻辑">
-        <mxGraphModel dx="873" dy="766" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="573" dy="766" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -361,6 +305,62 @@
                 </mxCell>
                 <mxCell id="APLVY59KveB7c-hZMULC-11" value="原名拆分结果" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="605" y="460" width="100" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="q8GxMIz54-Td6BBLf_oh" name="六要素间可能存在的冲突关系">
+        <mxGraphModel dx="573" dy="766" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-1" value="年代&lt;div&gt;（新石器为主）&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="170" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-2" value="文化" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="170" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-3" value="纹饰" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="90" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-4" value="材质" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="250" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-5" value="外形" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="170" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-6" value="器型&lt;div&gt;通称&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;imageWidth=24;imageHeight=24;" parent="1" vertex="1">
+                    <mxGeometry x="270" y="170" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-10" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="180" y="80" as="sourcePoint"/>
+                        <mxPoint x="230" y="30" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-11" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-6" target="OqACN1Rbr2dCTbYdbtUj-5" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="431" y="-20" as="sourcePoint"/>
+                        <mxPoint x="481" y="-70" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-12" value="" style="endArrow=classic;startArrow=classic;html=1;dashed=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-3" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="190" y="150" as="sourcePoint"/>
+                        <mxPoint x="240" y="40" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-14" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-4" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="170" y="280" as="sourcePoint"/>
+                        <mxPoint x="220" y="230" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="OqACN1Rbr2dCTbYdbtUj-15" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" parent="1" source="OqACN1Rbr2dCTbYdbtUj-2" target="OqACN1Rbr2dCTbYdbtUj-6" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="210" y="320" as="sourcePoint"/>
+                        <mxPoint x="260" y="270" as="targetPoint"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>
