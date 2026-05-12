@@ -1,0 +1,112 @@
+/* 全局基础重置 */
+.result-container {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background-color: #f0f2f5;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+/* 整体容器：横向排列，紧凑布局 */
+.name-container {
+    display: flex;
+    flex-wrap: nowrap; /* 尽量不换行，保持横向阅读 */
+    align-items: flex-end; /* 底部对齐，保证文字基线一致 */
+    gap: 8px; /* 紧凑的间距 */
+    background: #fff;
+    padding: 24px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    max-width: 100%;
+    overflow-x: auto; /* 如果屏幕太小允许横向滚动，但不打乱布局 */
+}
+
+/* 基础单元：垂直排列，宽度自适应 */
+.element-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content; /* 核心：宽度适应内部文字，不留白 */
+}
+
+/* 标签文字（年代、文化等） */
+.element-label {
+    font-size: 13px;
+    color: #8c8c8c;
+    margin-bottom: 4px;
+    margin-left: 4px;
+}
+
+/* 内容外框基础样式 */
+.element-value-box {
+    display: flex;
+    align-items: center;
+    border: 2px solid;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 22px;
+    font-weight: 500;
+    white-space: nowrap; /* 防止内部文字换行 */
+}
+
+/* --- 五种状态的视觉映射 --- */
+
+/* 1. 确认 (match) - 绿色 */
+.state-match {
+    border-color: #52c41a;
+    color: #52c41a;
+    background-color: #f6ffed;
+}
+.state-match::after {
+    content: ' ✓';
+    font-size: 16px;
+    margin-left: 4px;
+}
+
+/* 2. 纠正 (mismatch) - 红色主导，内部包含删除线和箭头 */
+.state-mismatch {
+    border-color: #f5222d;
+    background-color: #fff1f0;
+}
+.mismatch-old {
+    color: #8c8c8c;
+    text-decoration: line-through;
+    font-size: 18px; /* 原名稍微小一点 */
+    margin-right: 6px;
+}
+.mismatch-arrow {
+    color: #f5222d;
+    font-size: 16px;
+    margin-right: 6px;
+}
+.mismatch-new {
+    color: #f5222d;
+}
+
+/* 3. 沿用 (unverified) - 中性深灰色 */
+.state-unverified {
+    border-color: #595959;
+    color: #595959;
+    background-color: #fafafa;
+}
+
+/* 4. 补充 (added) - 绿色，带加号 */
+.state-added {
+    border-color: #52c41a;
+    color: #52c41a;
+    background-color: #f6ffed;
+}
+.state-added::before {
+    content: '+ ';
+    font-weight: bold;
+    margin-right: 2px;
+}
+
+/* 5. 空缺 (Empty) - 浅灰虚线 */
+.state-empty {
+    border-color: #d9d9d9;
+    border-style: dashed;
+    color: #bfbfbf;
+    background-color: transparent;
+    font-weight: normal;
+}

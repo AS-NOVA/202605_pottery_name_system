@@ -1,7 +1,6 @@
 // 1. 获取 DOM 元素
 const form = document.getElementById('potteryForm');    // 左侧的整个表单，是一个form，内含四个div和一个button
-const analysisResult = document.getElementById('analysisResult');    // 右侧的分析结果展示区域
-
+const analysisResult = document.getElementById('analysisResult');    // 右侧的分析结果展示区域，里面目前只有一个p标签是占位文字
 
 
 // 2. 绑定表单提交事件
@@ -45,7 +44,15 @@ form.addEventListener('submit', async (e) => {
         
         // 5. 渲染返回的数据
         analysisResult.innerHTML = ''; // 先清空之前的结果
-        analysisResult.textContent = JSON.stringify(result, null, 2);
+        // analysisResult.textContent = JSON.stringify(result, null, 2);
+
+
+        // 要调用compare.js中的renderComparison函数，把result传进去，让它来渲染对比结果
+        // 第二个参数要传待渲染容器本身
+        analysisResult.classList.add("result-container");
+        analysisResult.innerHTML = '<div class="name-container" id="pottery-name-container"></div>';
+        renderComparison(result, "pottery-name-container");
+
 
     } catch (error) {
         console.error('Error:', error);

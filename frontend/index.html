@@ -6,6 +6,7 @@
     <title>彩陶智能命名系统</title>
     <!-- 引入 Tailwind CSS，免去写独立 CSS 文件的烦恼 -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 <body class="bg-stone-100 min-h-screen p-8 text-gray-800 font-sans">
     <!-- 最外层容器 -->
@@ -13,7 +14,8 @@
         <!-- 标题 -->
         <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">彩陶智能体检与命名分析系统</h1>
         <!-- 双栏布局：左侧输入区，右侧结果展示区 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-10">-->
+        <div class="grid grid-cols-1 gap-10">
             <!-- ================= 左侧：信息输入区 ================= -->
             <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
                 <!-- 左侧标题 -->
@@ -99,6 +101,7 @@
             </div>
         </div>
     </div>
+    <script src="scripts/compare.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/upload.js"></script> 
 </body>
