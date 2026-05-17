@@ -1,5 +1,5 @@
 from typing import Any, Dict, Mapping, Optional
-from schemas import AnalyzeResponse, ElementAnalysis, ElementStatusType
+from schemas.models import AnalyzeResponse, ElementAnalysis, ElementStatusType
 
 FIELDS = ["era", "culture", "pattern", "material", "shape", "shape_type"]
 

@@ -1,17 +1,17 @@
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from schemas import AnalyzeResponse
+from schemas.models import AnalyzeResponse
 from typing import Optional
 import os
 import asyncio
 from dotenv import load_dotenv
 
 
-from llm_client import PotteryLLMClient
-from information_extract import parse_name, parse_desc, parse_image
-from structured_merge import merge_structured_fields, parse_structured_input, empty_fields
-from analysis_builder import build_analysis_response
+from core.llm_client import PotteryLLMClient
+from services.information_extract import parse_name, parse_desc, parse_image
+from services.structured_merge import merge_structured_fields, parse_structured_input, empty_fields
+from services.analysis_builder import build_analysis_response
 
 # ==========================================
 # 1. 基础配置与目录初始化

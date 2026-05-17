@@ -1,6 +1,6 @@
 from typing import Dict, Optional
-from llm_client import PotteryLLMClient
-from field_rules import filter_shape
+from core.llm_client import PotteryLLMClient
+from schemas.field_rules import filter_shape
 from dotenv import load_dotenv
 import os
 from fastapi import UploadFile
