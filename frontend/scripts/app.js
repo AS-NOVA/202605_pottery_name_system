@@ -53,6 +53,28 @@ form.addEventListener('submit', async (e) => {
         analysisResult.innerHTML = '<div class="name-container" id="pottery-name-container"></div>';
         renderComparison(result, "pottery-name-container");
 
+        const originalName = document.getElementById('originalName').value.trim();
+        const orderedKeys = ['era', 'culture', 'pattern', 'material', 'shape', 'shape_type'];
+        const systemParts = orderedKeys
+            .map((key) => result[key]?.new || result[key]?.origin)
+            .filter((value) => value && String(value).trim());
+        const systemName = systemParts.length ? systemParts.join('') : '（空）';
+
+        const summary = document.createElement('div');
+        summary.className = 'name-summary';
+        summary.innerHTML = `
+            <div class="element-box">
+                <span class="element-label">原名</span>
+                <div class="element-value-box state-empty">${originalName || '（空）'}</div>
+            </div>
+            <div class="name-arrow">➔</div>
+            <div class="element-box">
+                <span class="element-label">系统命名</span>
+                <div class="element-value-box state-match">${systemName}</div>
+            </div>
+        `;
+        analysisResult.appendChild(summary);
+
 
     } catch (error) {
         console.error('Error:', error);

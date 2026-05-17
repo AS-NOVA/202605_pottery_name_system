@@ -1,10 +1,13 @@
 /* 全局基础重置 */
 .result-container {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background-color: #f0f2f5;
-    padding: 40px;
+    background-color: transparent;
+    padding: 10px 6px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    gap: 12px;
 }
 
 /* 整体容器：横向排列，紧凑布局 */
@@ -109,4 +112,64 @@
     color: #bfbfbf;
     background-color: transparent;
     font-weight: normal;
+}
+
+/* 原名 -> 系统命名 的横向展示 */
+.name-summary {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    background: #fff;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.summary-value {
+    border-color: #cbd5e1;
+    color: #374151;
+    background-color: #f8fafc;
+}
+
+.name-arrow {
+    color: #6b7280;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+/* 图片上传区域 */
+.upload-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 520px;
+    min-height: 180px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #fafaf9;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    padding: 12px;
+}
+
+.upload-box:hover {
+    background: #f5f5f4;
+    border-color: #94a3b8;
+}
+
+.upload-box.has-image {
+    min-height: 0;
+    padding: 10px;
+}
+
+.upload-preview {
+    display: block;
+    max-width: 100%;
+    max-height: 360px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
 }

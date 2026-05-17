@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>彩陶智能命名系统</title>
+    <title>彩陶名称检查与命名系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
@@ -11,12 +11,12 @@
     <!-- 最外层容器 -->
     <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-stone-200">
         <!-- 标题 -->
-        <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">彩陶智能命名系统</h1>
+        <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">彩陶名称检查与命名系统</h1>
         <!-- 双栏布局：左侧输入区，右侧结果展示区 -->
         <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-10">-->
         <div class="grid grid-cols-1 gap-10">
             <!-- ================= 左侧：信息输入区 ================= -->
-            <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
+            <div class="bg-stone-50 p-5 rounded-lg border border-stone-200 shadow-sm">
                 <!-- 左侧标题 -->
                 <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">1. 输入多源信息</h2>
                 <!-- 左侧表单：图片上传 + 结构化信息 + 描述文本 -->
@@ -30,8 +30,9 @@
 
                         <!-- 自定义上传区域（点击触发 input） -->
                         <label
+                        id="uploadBox"
                         for="imageInput"
-                        class="flex items-center justify-center w-full h-48 border-2 border-dashed border-stone-300 rounded-lg cursor-pointer bg-stone-50 hover:bg-stone-100 transition overflow-hidden"
+                        class="upload-box"
                         >
                         <!-- 占位文字 -->
                         <span id="uploadPlaceholder" class="text-stone-400 text-sm">
@@ -41,7 +42,7 @@
                         <!-- 图片预览（默认隐藏） -->
                         <img
                             id="previewImage"
-                            class="hidden object-contain w-full h-full"
+                            class="upload-preview hidden"
                             alt="预览图片"
                         />
                         </label>
@@ -64,7 +65,7 @@
                             -->
                         </div>
                         <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1 text-gray-600">文化</label>
+                            <label class="block text-sm font-medium mb-1 text-gray-600">所属文化</label>
                             <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
                             <!--
                             <select id="cultureSelect" class="w-full border rounded-md p-2 text-sm bg-white">
@@ -77,12 +78,12 @@
                     </div>
                     <!-- 4描述 -->
                     <div>
-                        <label class="block text-sm font-medium mb-1 text-gray-600">文字描述 (补充材质、外形等)</label>
+                        <label class="block text-sm font-medium mb-1 text-gray-600">文字描述</label>
                         <textarea id="description" rows="3" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none"></textarea>
                     </div>
                     <!-- 提交按钮 -->
                     <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-md hover:bg-orange-700 transition duration-200 shadow-md">
-                        命名检查与建议
+                        名称检查或命名
                     </button>
                 </form>
             </div>
@@ -90,12 +91,12 @@
             <!-- ================= 右侧：结果展示区 ================= -->
             <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
                 <!-- 右侧标题 -->
-                <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">2. 体检报告与解析</h2>
+                <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">2.名称检查与命名结果</h2>
                 
                 <!-- 显示结果 -->
                 <div id="analysisResult" class="space-y-4">
                     <!-- 这里的内容将由 JavaScript 动态生成 -->
-                    <p class="text-stone-500 italic">请上传图片并填写信息后，点击“命名检查与建议”按钮查看分析结果。</p>
+                    <p class="text-stone-500 italic">请上传图片并填写信息后，点击“名称检查或命名”按钮查看分析结果。</p>
                 </div>
             </div>
         </div>

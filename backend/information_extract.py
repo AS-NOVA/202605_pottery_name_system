@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 from llm_client import PotteryLLMClient
+from field_rules import filter_shape
 from dotenv import load_dotenv
 import os
 from fastapi import UploadFile
@@ -43,6 +44,10 @@ def parse_desc(client: PotteryLLMClient, description: str) -> Dict[str, Optional
 
     # 调用大模型解析
     result = client.extract_from_description(description.strip())
+
+    # 临时补丁规则：材质固定为彩陶，shape 需满足合法组合
+    result["material"] = "彩陶"
+    result["shape"] = filter_shape(result.get("shape"))
     return result
 
 def uploadfile_to_base64(file: UploadFile) -> str:
@@ -72,6 +77,9 @@ def parse_image(client: PotteryLLMClient, image: UploadFile) -> Dict[str, Option
 
     # 调用大模型解析
     result = client.extract_from_image(image_base64)
+
+    # 临时补丁规则：shape 需满足合法组合
+    result["shape"] = filter_shape(result.get("shape"))
     return result
 
 if __name__ == "__main__":
@@ -92,12 +100,12 @@ if __name__ == "__main__":
     parsed_desc = parse_desc(client, test_desc)
     print(parsed_desc)
 
-    test_img_path = "test_data/b1p22.png"
+    test_img_path = Path(__file__).resolve().parent / "test_data" / "b1p22.png"
     with open(test_img_path, "rb") as f:
         content = f.read()
     
     test_img = UploadFile(
-        filename=Path(test_img_path).name,
+        filename=test_img_path.name,
         file=io.BytesIO(content),
     )
     
