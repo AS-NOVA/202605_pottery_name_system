@@ -27,27 +27,28 @@ def parse_name(client: PotteryLLMClient, original_name: str) -> Dict[str, Option
     result = client.parse_original_name(original_name.strip())
     return result
 
-def parse_desc(client: PotteryLLMClient, description: str) -> Dict[str, Optional[str]]:
+def parse_desc(client: PotteryLLMClient, description: str) -> Dict[str, Optional[Dict[str, str]]]:
     """
-    使用大模型根据描述文本提取信息。
-    如果 description 为空，直接返回全 None 的字典。
+    使用大模型根据描述文本提取信息。返回值为嵌套字典，每个字段含有 value 和 source_text。
     """
     if not description or not description.strip():
-        return {
-            "era": None,
-            "culture": None,
-            "pattern": None,
-            "material": None,
-            "shape": None,
-            "shape_type": None,
-        }
+        return {key: None for key in ["era", "culture", "pattern", "material", "shape", "shape_type"]}
 
-    # 调用大模型解析
     result = client.extract_from_description(description.strip())
 
     # 临时补丁规则：材质固定为彩陶，shape 需满足合法组合
-    result["material"] = "彩陶"
-    result["shape"] = filter_shape(result.get("shape"))
+    if result.get("material") is None:
+        result["material"] = {"value": "彩陶", "source_text": ""}
+    elif isinstance(result.get("material"), dict):
+        result["material"]["value"] = "彩陶"
+    else:
+        result["material"] = {"value": "彩陶", "source_text": ""}
+
+    shape_obj = result.get("shape")
+    if isinstance(shape_obj, dict) and shape_obj.get("value"):
+        shape_obj["value"] = filter_shape(shape_obj["value"])
+        result["shape"] = shape_obj
+
     return result
 
 def uploadfile_to_base64(file: UploadFile) -> str:

@@ -1,7 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from schemas.models import AnalyzeResponse
 from typing import Optional
 import os
 import asyncio
@@ -11,7 +10,6 @@ from dotenv import load_dotenv
 from core.llm_client import PotteryLLMClient
 from services.information_extract import parse_name, parse_desc, parse_image
 from services.structured_merge import merge_structured_fields, parse_structured_input, empty_fields
-from services.analysis_builder import build_analysis_response
 
 # ==========================================
 # 1. 基础配置与目录初始化
@@ -38,28 +36,21 @@ app.add_middleware(
 async def root():
     return {"message": "后端已启动"}
 
+from schemas.models import ParseNameResponse, GenerateNameResponse
+
 # ==========================================
-# 2. 核心接口：分析与命名建议
+# 2. 核心接口：拆解原名与生成命名
 # ==========================================
 
-@app.post("/api/analyze")
-async def analyze_pottery(
-    image: Optional[UploadFile] = File(None),
-    description: Optional[str] = Form(None),
-    structured_data: Optional[str] = Form(None),
-    original_name: Optional[str] = Form(""),
-):
-
-    # ------------- 初始化大模型客户端（复用同一实例） -------------
-    # 建议从环境变量或配置中心读取
-    load_dotenv()  # 从 .env 文件加载环境变量
+def get_llm_client():
+    load_dotenv()
     ds_api_key = os.getenv("DEEPSEEK_API_KEY", "")
     ds_base_url = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
     ds_model = os.getenv("DEEPSEEK_MODEL", "deepseek-v4-flash")
     qwen_api_key = os.getenv("QWEN_API_KEY", "")
     qwen_base_url = os.getenv("QWEN_BASE_URL", "")
     qwen_model = os.getenv("QWEN_MODEL", "qwen3.6-flash")
-    client = PotteryLLMClient(
+    return PotteryLLMClient(
         text_llm_api_key=ds_api_key,
         text_llm_base_url=ds_base_url,
         text_llm_model=ds_model,
@@ -68,12 +59,36 @@ async def analyze_pottery(
         mutimodal_llm_model=qwen_model,
     )
 
-    # ------------- 解析原名（耗时的同步调用放入线程池） -------------
+@app.post("/api/parse_name", response_model=ParseNameResponse)
+async def api_parse_name(
+    original_name: str = Form(""),
+):
+    print(f"\n[DEBUG] === 收到拆解原名请求 ===")
+    print(f"[DEBUG] 输入原名: {original_name}")
+    
+    client = get_llm_client()
     parsed_name = await asyncio.to_thread(
-        parse_name, client, original_name or ""
+        parse_name, client, original_name
     )
+    
+    import json
+    print(f"[DEBUG] 拆解结果:\n{json.dumps(parsed_name, ensure_ascii=False, indent=2)}")
+    print(f"[DEBUG] ==========================\n")
+    return parsed_name
 
-    # ------------- 解析描述与图片 -------------
+@app.post("/api/generate_name", response_model=GenerateNameResponse)
+async def api_generate_name(
+    image: Optional[UploadFile] = File(None),
+    description: Optional[str] = Form(None),
+    structured_data: Optional[str] = Form(None),
+):
+    print(f"\n[DEBUG] === 收到生成推荐命名请求 ===")
+    print(f"[DEBUG] 图片上传: {'是' if image else '否'}")
+    print(f"[DEBUG] 文字描述: {description}")
+    print(f"[DEBUG] 结构化信息: {structured_data}")
+    
+    client = get_llm_client()
+    
     parsed_desc = await asyncio.to_thread(
         parse_desc, client, description or ""
     )
@@ -92,14 +107,7 @@ async def analyze_pottery(
         parsed_image,
     )
 
-
-    # origin_era = parsed_name.get("era")
-    # origin_culture = parsed_name.get("culture")
-    # origin_pattern = parsed_name.get("pattern")
-    # origin_material = parsed_name.get("material")
-    # origin_shape = parsed_name.get("shape")
-    # origin_shape_type = parsed_name.get("shape_type")
-
-
-
-    return build_analysis_response(parsed_name, merged_structured)
+    import json
+    print(f"[DEBUG] 最终生成命名及溯源结果:\n{json.dumps(merged_structured, ensure_ascii=False, indent=2)}")
+    print(f"[DEBUG] ==============================\n")
+    return merged_structured

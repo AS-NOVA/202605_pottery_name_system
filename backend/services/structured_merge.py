@@ -58,15 +58,42 @@ def merge_structured_fields(
     structured_data: Optional[Mapping[str, Any]],
     description_data: Optional[Mapping[str, Any]],
     image_data: Optional[Mapping[str, Any]],
-) -> Dict[str, Optional[str]]:
+) -> Dict[str, Dict[str, Optional[str]]]:
     structured = _normalize_dict(structured_data)
-    description = _normalize_dict(description_data)
     image = _normalize_dict(image_data)
+    
+    # description_data 可能是 {"pattern": {"value": "x", "source_text": "y"}, ...} 结构
+    description = description_data or {}
 
-    result: Dict[str, Optional[str]] = {}
+    result = {}
     for field in FIELDS:
-        if field in ("era", "culture"):
-            result[field] = structured.get(field) or description.get(field) or image.get(field)
+        val_struct = structured.get(field)
+        val_img = image.get(field)
+        
+        desc_obj = description.get(field)
+        if isinstance(desc_obj, dict):
+            val_desc = desc_obj.get("value")
+            source_text = desc_obj.get("source_text")
         else:
-            result[field] = description.get(field) or structured.get(field) or image.get(field)
+            val_desc = desc_obj if isinstance(desc_obj, str) else None
+            source_text = None
+
+        if field in ("era", "culture"):
+            if val_struct:
+                result[field] = {"value": val_struct, "source": "结构化输入", "source_text": None}
+            elif val_desc:
+                result[field] = {"value": val_desc, "source": "文字描述", "source_text": source_text}
+            elif val_img:
+                result[field] = {"value": val_img, "source": "图片上传", "source_text": None}
+            else:
+                result[field] = {"value": None, "source": None, "source_text": None}
+        else:
+            if val_desc:
+                result[field] = {"value": val_desc, "source": "文字描述", "source_text": source_text}
+            elif val_struct:
+                result[field] = {"value": val_struct, "source": "结构化输入", "source_text": None}
+            elif val_img:
+                result[field] = {"value": val_img, "source": "图片上传", "source_text": None}
+            else:
+                result[field] = {"value": None, "source": None, "source_text": None}
     return result

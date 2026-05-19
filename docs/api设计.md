@@ -6,42 +6,89 @@
 
 # 彩陶智能命名系统 API 格式
 
-## 1. 核心分析接口 (Analyze Pottery)
+## 1. 拆解原名接口 (Parse Original Name)
 
 ### 请求格式
 
-- **路径:** `/api/analyze`
-- **方法:** `POST`
-- **Content-Type:** `multipart/form-data`
+- **路径:** `/api/parse_name`
+- **方法:** `POST`
+- **Content-Type:** `multipart/form-data`
 
-| 字段名            | 类型        | 必填 | 说明                                                            |
-| :---------------- | :---------- | :--- | :-------------------------------------------------------------- |
-| `image`           | File        | 否   | 彩陶文物图片文件                                                |
-| `description`     | String      | 否   | 非结构化描述文本                                                |
-| `structured_data` | JSON String | 否   | 结构化字段字典，如 `{"era":"新石器时代", "culture":"仰韶文化"}` |
-| `original_name`   | String      | 否   | 现存的原始命名                                                  |
+| 字段名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| `original_name` | String | 是 | 现存的原始命名 |
 
 ### 响应格式
 
 - **Content-Type:** `application/json`
-- **数据结构:** 包含 6 个固定 Key，每个 Key 对应一个要素状态对象。状态类型 (`type`) 枚举值为：
-
-  - `MATCH`: 完全相同
-  - `MISMATCH`: 都有但不同 (冲突)
-  - `ADDED`: 原名无，系统补充
-  - `UNVERIFIED`: 原名有，系统无法判定，沿用原名
-  - `EMPTY`: 二者皆无
-
-- **JSON 示例:**
+- **数据结构:** 包含 6 个固定 Key 的 JSON 字典，表示抽取出的原名要素。
 
 ```json
 {
-  "era": { "origin": "新石器时代", "new": null, "type": "UNVERIFIED" },
-  "culture": { "origin": "仰韶文化", "new": "仰韶文化", "type": "MATCH" },
-  "pattern": { "origin": null, "new": "几何纹", "type": "ADDED" },
-  "material": { "origin": "彩陶", "new": "彩陶", "type": "MATCH" },
-  "shape": { "origin": null, "new": null, "type": "EMPTY" },
-  "shape_type": { "origin": "盘", "new": "盆", "type": "MISMATCH" }
+  "era": "新石器时代",
+  "culture": "仰韶文化",
+  "pattern": null,
+  "material": "彩陶",
+  "shape": null,
+  "shape_type": "盘"
 }
 ```
 
+## 2. 生成命名接口 (Generate Recommended Name)
+
+### 请求格式
+
+- **路径:** `/api/generate_name`
+- **方法:** `POST`
+- **Content-Type:** `multipart/form-data`
+
+| 字段名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| `image` | File | 否 | 彩陶文物图片文件 |
+| `description` | String | 否 | 非结构化描述文本 |
+| `structured_data` | JSON String | 否 | 结构化字段字典，如 `{"era":"新石器时代", "culture":"仰韶文化"}` |
+
+### 响应格式
+
+- **Content-Type:** `application/json`
+- **数据结构:** 包含 6 个固定 Key 的 JSON 字典，表示系统推荐的新命名要素。每个要素是一个包含 `value`, `source` 和 `source_text` 的对象。
+  - `value`: 推荐命名的具体值
+  - `source`: 来源类别（如："结构化输入", "文字描述", "图片上传"）
+  - `source_text`: 仅当来源为文字描述时，附带的大模型抽取的原文摘录
+
+```json
+{
+  "era": {
+    "value": null,
+    "source": null,
+    "source_text": null
+  },
+  "culture": {
+    "value": "仰韶文化",
+    "source": "结构化输入",
+    "source_text": null
+  },
+  "pattern": {
+    "value": "几何纹",
+    "source": "文字描述",
+    "source_text": "饰黑色几何纹"
+  },
+  "material": {
+    "value": "彩陶",
+    "source": "图片上传",
+    "source_text": null
+  },
+  "shape": {
+    "value": null,
+    "source": null,
+    "source_text": null
+  },
+  "shape_type": {
+    "value": "盆",
+    "source": "文字描述",
+    "source_text": "盆。"
+  }
+}
+```
+
+> **注意：** 状态属性（确认、补充、纠正等）由前端通过缓存这 2 个接口的返回值自行比对计算。

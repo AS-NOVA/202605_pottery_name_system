@@ -2,27 +2,24 @@
 
 from pydantic import BaseModel
 from typing import Optional
-from enum import Enum
 
-# 定义你设计的五种状态枚举，规范代码，防止手滑拼错
-class ElementStatusType(str, Enum):
-    MATCH = "MATCH"
-    MISMATCH = "MISMATCH"
-    ADDED = "ADDED"
-    UNVERIFIED = "UNVERIFIED"
-    EMPTY = "EMPTY"
+class ParseNameResponse(BaseModel):
+    era: Optional[str] = None
+    culture: Optional[str] = None
+    pattern: Optional[str] = None
+    material: Optional[str] = None
+    shape: Optional[str] = None
+    shape_type: Optional[str] = None
 
-# 定义单个要素的结构
-class ElementAnalysis(BaseModel):
-    origin: Optional[str] = None
-    new: Optional[str] = None
-    type: ElementStatusType
+class ElementResult(BaseModel):
+    value: Optional[str] = None
+    source: Optional[str] = None
+    source_text: Optional[str] = None
 
-# 定义最终返回给前端的完整大 JSON
-class AnalyzeResponse(BaseModel):
-    era: ElementAnalysis
-    culture: ElementAnalysis
-    pattern: ElementAnalysis
-    material: ElementAnalysis
-    shape: ElementAnalysis
-    shape_type: ElementAnalysis
+class GenerateNameResponse(BaseModel):
+    era: Optional[ElementResult] = None
+    culture: Optional[ElementResult] = None
+    pattern: Optional[ElementResult] = None
+    material: Optional[ElementResult] = None
+    shape: Optional[ElementResult] = None
+    shape_type: Optional[ElementResult] = None
