@@ -5,103 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>彩陶名称检查与命名系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 利用 Tailwind 的 @apply 提取公共组件样式，精简 HTML 标签 -->
+    <style type="text/tailwindcss">
+        @layer components {
+            .card {
+                @apply bg-white p-5 border border-stone-200; /* 扁平化，无阴影，缩小 padding */
+            }
+            .section-title {
+                @apply text-xl font-medium mb-6 pb-2 border-b border-stone-200 text-orange-900;
+            }
+            .form-label {
+                @apply block text-base mb-2 text-stone-600;
+            }
+            .form-input {
+                @apply w-full border border-stone-300 bg-stone-50 p-3 text-base focus:border-orange-800 focus:bg-white focus:ring-0 outline-none transition-colors;
+            }
+            .btn-primary {
+                @apply w-full bg-orange-900 text-stone-50 text-lg py-3 hover:bg-orange-800 transition-colors duration-200;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="styles/style.css">
 </head>
-<body class="bg-stone-100 min-h-screen p-8 text-gray-800 font-sans">
-    <!-- 最外层容器 -->
-    <div class="max-w-5xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-stone-200">
-        <!-- 标题 -->
-        <h1 class="text-3xl font-bold mb-8 text-center text-orange-800">彩陶名称检查与命名系统</h1>
-        <!-- 双栏布局：左侧输入区，右侧结果展示区 -->
-        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-10">-->
-        <div class="grid grid-cols-1 gap-10">
+<body class="bg-stone-100 min-h-screen p-4 text-stone-800 font-sans">
+    <div class="max-w-[1400px] mx-auto">
+        <h1 class="text-3xl font-medium mb-8 mt-2 text-orange-900 tracking-wide">彩陶名称检查与命名系统</h1>
+        
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
             <!-- ================= 左侧：信息输入区 ================= -->
-            <div class="bg-stone-50 p-5 rounded-lg border border-stone-200 shadow-sm">
-                <!-- 左侧标题 -->
-                <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">1. 输入多源信息</h2>
-                <!-- 左侧表单：图片上传 + 结构化信息 + 描述文本 -->
+            <div class="card xl:col-span-4">
+                <h2 class="section-title">1. 输入多源信息</h2>
                 <form id="potteryForm" class="space-y-4">
-                    <!-- 1图片上传区 -->
+                    <!-- 1. 图片上传 -->
                     <div>
-                        <label class="block text-sm font-medium mb-1 text-gray-600">图片上传</label>
-                        <!-- <input type="file" id="imageInput" class="w-full border rounded-md p-2 text-sm bg-stone-50"> -->
-                         <!-- 隐藏原生文件输入 -->
+                        <label class="form-label">图片上传</label>
                         <input type="file" id="imageInput" accept="image/*" class="hidden" />
-
-                        <!-- 自定义上传区域（点击触发 input） -->
-                        <label
-                        id="uploadBox"
-                        for="imageInput"
-                        class="upload-box"
-                        >
-                        <!-- 占位文字 -->
-                        <span id="uploadPlaceholder" class="text-stone-400 text-sm">
-                            📷 点击上传图片
-                        </span>
-
-                        <!-- 图片预览（默认隐藏） -->
-                        <img
-                            id="previewImage"
-                            class="upload-preview hidden"
-                            alt="预览图片"
-                        />
+                        <label id="uploadBox" for="imageInput" class="upload-box">
+                            <span id="uploadPlaceholder" class="text-stone-400 text-sm">📷 点击上传图片</span>
+                            <img id="previewImage" class="upload-preview hidden" alt="预览图片" />
                         </label>
                     </div>
-                    <!-- 2原参考名 -->
+                    <!-- 2. 原参考名 -->
                     <div>
-                        <label class="block text-sm font-medium mb-1 text-gray-600">原参考名</label>
-                        <input type="text" id="originalName" placeholder="例如：马家窑文化黑彩网格纹壶" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
+                        <label class="form-label">原参考名</label>
+                        <input type="text" id="originalName" placeholder="例如：马家窑文化黑彩网格纹壶" class="form-input">
                     </div>
-                    <!-- 3结构化信息 -->
+                    <!-- 3. 结构化信息 -->
                     <div class="flex gap-4">
                         <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1 text-gray-600">时代</label>
-                            <input type="text" id="eraInput" placeholder="例如：新石器时代" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
-                            <!--
-                            <select id="eraSelect" class="w-full border rounded-md p-2 text-sm bg-white">
-                                <option value="">(空)</option>
-                                <option value="新石器时代晚期">新石器时代晚期</option>
-                            </select>
-                            -->
+                            <label class="form-label">时代</label>
+                            <input type="text" id="eraInput" placeholder="例如：新石器时代" class="form-input">
                         </div>
                         <div class="flex-1">
-                            <label class="block text-sm font-medium mb-1 text-gray-600">所属文化</label>
-                            <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none">
-                            <!--
-                            <select id="cultureSelect" class="w-full border rounded-md p-2 text-sm bg-white">
-                                <option value="">(空)</option>
-                                <option value="仰韶文化">仰韶文化</option>
-                                <option value="马家窑文化">马家窑文化</option>
-                            </select>
-                            -->
+                            <label class="form-label">所属文化</label>
+                            <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="form-input">
                         </div>
                     </div>
-                    <!-- 4描述 -->
+                    <!-- 4. 文字描述 -->
                     <div>
-                        <label class="block text-sm font-medium mb-1 text-gray-600">文字描述</label>
-                        <textarea id="description" rows="3" class="w-full border rounded-md p-2 text-sm focus:ring-2 focus:ring-orange-200 outline-none"></textarea>
+                        <label class="form-label">文字描述</label>
+                        <textarea id="description" rows="3" class="form-input"></textarea>
                     </div>
-                    <!-- 提交按钮 -->
-                    <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-md hover:bg-orange-700 transition duration-200 shadow-md">
-                        名称检查或命名
-                    </button>
+                    
+                    <button type="submit" class="btn-primary">名称检查或命名</button>
                 </form>
             </div>
 
             <!-- ================= 右侧：结果展示区 ================= -->
-            <div class="bg-stone-50 p-6 rounded-lg border border-stone-200">
-                <!-- 右侧标题 -->
-                <h2 class="text-xl font-semibold mb-5 border-b-2 border-orange-100 pb-2">2.名称检查与命名结果</h2>
-                
-                <!-- 显示结果 -->
+            <div class="card xl:col-span-8">
+                <h2 class="section-title">2. 名称检查与命名结果</h2>
                 <div id="analysisResult" class="space-y-4">
-                    <!-- 这里的内容将由 JavaScript 动态生成 -->
                     <p class="text-stone-500 italic">请上传图片并填写信息后，点击“名称检查或命名”按钮查看分析结果。</p>
                 </div>
             </div>
         </div>
     </div>
-    <script src="scripts/compare.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/ui.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/upload.js"></script> 
 </body>

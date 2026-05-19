@@ -10,102 +10,122 @@
     gap: 12px;
 }
 
-/* 整体容器：横向排列，紧凑布局 */
+/* 整体容器：包含内部网格 */
 .name-container {
-    display: flex;
-    flex-wrap: nowrap; /* 尽量不换行，保持横向阅读 */
-    align-items: flex-end; /* 底部对齐，保证文字基线一致 */
-    gap: 8px; /* 紧凑的间距 */
     background: #fff;
     padding: 24px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: 0px; /* 去除圆角，更加扁平 */
+    border: 1px solid #e4e4e7; /* 添加细边框代替阴影 */
     max-width: 100%;
-    overflow-x: auto; /* 如果屏幕太小允许横向滚动，但不打乱布局 */
+    overflow-x: auto;
 }
 
-/* 基础单元：垂直排列，宽度自适应 */
-.element-box {
+/* 核心网格布局：7列（表头+6个属性）x 3行（表头+原名+新名） */
+.comparison-grid {
+    display: grid;
+    grid-template-columns: max-content repeat(6, max-content);
+    grid-template-rows: auto auto auto;
+    gap: 16px 12px;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* 单元格基本居中对齐 */
+.grid-cell {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: fit-content; /* 核心：宽度适应内部文字，不留白 */
+    justify-content: center;
+    align-items: center;
 }
 
-/* 标签文字（年代、文化等） */
-.element-label {
-    font-size: 13px;
+/* 表头单元格（年代、文化等） */
+.cell-header {
+    font-size: 14px;
     color: #8c8c8c;
+    font-weight: bold;
     margin-bottom: 4px;
-    margin-left: 4px;
+}
+
+/* 行首标签（原名、新名） */
+.cell-row-label {
+    font-size: 15px;
+    color: #595959;
+    font-weight: bold;
+    padding-right: 12px;
+    justify-content: flex-end;
 }
 
 /* 内容外框基础样式 */
 .element-value-box {
     display: flex;
     align-items: center;
-    border: 2px solid;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 22px;
+    justify-content: center;
+    border: 1px solid; /* 恢复为较细的 1px 线条，保持克制感 */
+    border-radius: 4px; /* 微调圆角以匹配稍粗的边框 */
+    padding: 8px 12px; /* 增大内边距让空间更舒展 */
+    font-size: 18px; /* 字号调大 */
     font-weight: 500;
-    white-space: nowrap; /* 防止内部文字换行 */
+    white-space: nowrap;
+    width: 100%;
+    min-width: 88px; /* 核心：设置最小宽度，保证哪怕全是横线也有基础占位，不会显得过于单薄 */
+    box-sizing: border-box;
+    min-height: 44px;
 }
 
-/* --- 五种状态的视觉映射 --- */
+/* --- 五种状态的视觉映射 (两行设计) --- */
 
-/* 1. 确认 (match) - 绿色 */
-.state-match {
+/* 1. 确认 (Match) - 上下绿 */
+.state-match-top, .state-match-bottom {
     border-color: #52c41a;
     color: #52c41a;
     background-color: #f6ffed;
 }
-.state-match::after {
+.state-match-bottom::after {
     content: ' ✓';
     font-size: 16px;
     margin-left: 4px;
 }
 
-/* 2. 纠正 (mismatch) - 红色主导，内部包含删除线和箭头 */
-.state-mismatch {
+/* 2. 纠正 (Mismatch) - 上灰带删除线，下红 */
+.state-mismatch-top {
+    border-color: #d9d9d9;
+    color: #8c8c8c;
+    background-color: #f5f5f5;
+    text-decoration: line-through;
+}
+.state-mismatch-bottom {
     border-color: #f5222d;
+    color: #f5222d;
     background-color: #fff1f0;
 }
-.mismatch-old {
-    color: #8c8c8c;
-    text-decoration: line-through;
-    font-size: 18px; /* 原名稍微小一点 */
-    margin-right: 6px;
-}
-.mismatch-arrow {
-    color: #f5222d;
-    font-size: 16px;
-    margin-right: 6px;
-}
-.mismatch-new {
-    color: #f5222d;
-}
 
-/* 3. 沿用 (unverified) - 中性深灰色 */
-.state-unverified {
+/* 3. 沿用 (Unverified) - 上下深灰继承 */
+.state-unverified-top {
     border-color: #595959;
     color: #595959;
     background-color: #fafafa;
 }
+.state-unverified-bottom {
+    border-color: #8c8c8c;
+    border-style: dashed;
+    color: #595959;
+    background-color: #fafafa;
+}
 
-/* 4. 补充 (added) - 绿色，带加号 */
-.state-added {
+/* 4. 补充 (Added) - 上空缺，下绿 */
+.state-added-bottom {
     border-color: #52c41a;
     color: #52c41a;
     background-color: #f6ffed;
 }
-.state-added::before {
+.state-added-bottom::before {
     content: '+ ';
     font-weight: bold;
     margin-right: 2px;
 }
 
-/* 5. 空缺 (Empty) - 浅灰虚线 */
+/* 5. 空缺 (Empty) - 上下空缺 */
 .state-empty {
     border-color: #d9d9d9;
     border-style: dashed;
@@ -147,17 +167,17 @@
     width: 100%;
     max-width: 520px;
     min-height: 180px;
-    border: 1px dashed #cbd5e1;
-    border-radius: 12px;
+    border: 1px dashed #d6d3d1; /* stone-300 */
+    border-radius: 0px; /* 扁平直角 */
     cursor: pointer;
-    background: #fafaf9;
+    background: #f5f5f4; /* stone-100 */
     transition: background 0.2s ease, border-color 0.2s ease;
     padding: 12px;
 }
 
 .upload-box:hover {
-    background: #f5f5f4;
-    border-color: #94a3b8;
+    background: #e7e5e4; /* stone-200 */
+    border-color: #a8a29e; /* stone-400 */
 }
 
 .upload-box.has-image {

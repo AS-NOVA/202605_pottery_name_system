@@ -1,83 +1,29 @@
-// 1. 获取 DOM 元素
-const form = document.getElementById('potteryForm');    // 左侧的整个表单，是一个form，内含四个div和一个button
-const analysisResult = document.getElementById('analysisResult');    // 右侧的分析结果展示区域，里面目前只有一个p标签是占位文字
+// app.js - 主控制器，负责监听事件并协调 API 和 UI 模块
 
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('potteryForm');
 
-// 2. 绑定表单提交事件
-form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // 阻止浏览器默认的页面刷新行为
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // 阻止浏览器默认的页面刷新行为
 
-    analysisResult.textContent = "正在分析中...";
+        // 1. 更新 UI 状态：显示加载中
+        ui.showLoading();
 
-    // 3. 收集表单中用户填写的数据
-    const formData = new FormData();
-    formData.append('original_name', document.getElementById('originalName').value);
-    formData.append('description', document.getElementById('description').value);
-    // const era = document.getElementById('eraSelect').value;
-    const era = document.getElementById('eraInput').value;
-    // const culture = document.getElementById('cultureSelect').value;
-    const culture = document.getElementById('cultureInput').value;
-    const structuredData = {era: era, culture: culture};
-    formData.append('structured_data', JSON.stringify(structuredData));
+        try {
+            // 2. 收集数据
+            const formData = ui.getFormData();
+            
+            // 3. 发送请求
+            const result = await api.analyzePottery(formData);
+            
+            // 4. 渲染结果
+            const originalName = document.getElementById('originalName').value.trim();
+            ui.renderResult(result, originalName);
 
-    
-    const imageFile = document.getElementById('imageInput').files[0];
-    if (imageFile) {
-        formData.append('image', imageFile);
-    }
-
-    try {
-        // 4. 发起 HTTP 请求到 FastAPI 后端
-        // 注意：发送的数据formData的格式必须和后端/api/analyze接口预期的格式一致
-        // 这里需要等待await，当后端返回response后，才能继续
-        // response里面先是有状态码，但fetch结束后，数据还没送到
-        const response = await fetch('http://127.0.0.1:8000/api/analyze', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) throw new Error('网络请求失败');
-        
-        // 如果请求成功，不代表数据已经拿到了，还需要继续等待response.json()把数据解析出来，所以这里也要await
-        // 把后端返回的response解析成可用的result
-        const result = await response.json();
-        
-        // 5. 渲染返回的数据
-        analysisResult.innerHTML = ''; // 先清空之前的结果
-        // analysisResult.textContent = JSON.stringify(result, null, 2);
-
-
-        // 要调用compare.js中的renderComparison函数，把result传进去，让它来渲染对比结果
-        // 第二个参数要传待渲染容器本身
-        analysisResult.classList.add("result-container");
-        analysisResult.innerHTML = '<div class="name-container" id="pottery-name-container"></div>';
-        renderComparison(result, "pottery-name-container");
-
-        const originalName = document.getElementById('originalName').value.trim();
-        const orderedKeys = ['era', 'culture', 'pattern', 'material', 'shape', 'shape_type'];
-        const systemParts = orderedKeys
-            .map((key) => result[key]?.new || result[key]?.origin)
-            .filter((value) => value && String(value).trim());
-        const systemName = systemParts.length ? systemParts.join('') : '（空）';
-
-        const summary = document.createElement('div');
-        summary.className = 'name-summary';
-        summary.innerHTML = `
-            <div class="element-box">
-                <span class="element-label">原名</span>
-                <div class="element-value-box state-empty">${originalName || '（空）'}</div>
-            </div>
-            <div class="name-arrow">➔</div>
-            <div class="element-box">
-                <span class="element-label">系统命名</span>
-                <div class="element-value-box state-match">${systemName}</div>
-            </div>
-        `;
-        analysisResult.appendChild(summary);
-
-
-    } catch (error) {
-        console.error('Error:', error);
-        analysisResult.innerHTML = `<span class="text-red-500 font-bold">请求失败：${error.message} (请检查后端服务是否已启动)</span>`;
-    }
+        } catch (error) {
+            console.error('Error:', error);
+            // 5. 渲染错误信息
+            ui.showError(error);
+        }
+    });
 });
