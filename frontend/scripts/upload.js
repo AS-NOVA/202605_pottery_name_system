@@ -1,19 +1,29 @@
+document.addEventListener('DOMContentLoaded', () => {
   const fileInput = document.getElementById('imageInput');
-  const placeholder = document.getElementById('uploadPlaceholder');
-  const preview = document.getElementById('previewImage');
-  const uploadBox = document.getElementById('uploadBox');
+  if (!fileInput) return;
 
   fileInput.addEventListener('change', function () {
-    const file = this.files[0];
-    if (!file) return;
+    const files = Array.from(this.files);
+    if (files.length === 0) return;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      // 显示图片，隐藏占位文字
-      preview.classList.remove('hidden');
-      placeholder.classList.add('hidden');
-      uploadBox.classList.add('has-image');
-    };
-    reader.readAsDataURL(file);
+    if (!ui.selectedFiles) {
+        ui.selectedFiles = [];
+    }
+
+    files.forEach(file => {
+        // 防止用户上传完全重复的文件 (比对文件名和文件大小)
+        const isDuplicate = ui.selectedFiles.some(
+            existing => existing.name === file.name && existing.size === file.size
+        );
+        if (!isDuplicate) {
+            ui.selectedFiles.push(file);
+        }
+    });
+
+    // 关键：清空 fileInput.value，让用户下次即使选择同一个文件也能触发 change 事件
+    fileInput.value = '';
+
+    // 更新前端图片网格预览
+    ui.updateImagePreviews();
   });
+});

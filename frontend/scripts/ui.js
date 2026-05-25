@@ -1,6 +1,9 @@
 // ui.js - 专门负责 DOM 操作和页面渲染逻辑
 
 const ui = {
+    // 全局已选择的图片文件数组
+    selectedFiles: [],
+
     /**
      * 从表单中收集用户输入的数据并封装为 FormData
      * @returns {FormData}
@@ -14,11 +17,75 @@ const ui = {
         const structuredData = {era: era, culture: culture};
         formData.append('structured_data', JSON.stringify(structuredData));
         
-        const imageFile = document.getElementById('imageInput').files[0];
-        if (imageFile) {
-            formData.append('image', imageFile);
+        // 遍历所有选中的多图并添加到 Form 数据中 (多值同键 'images')
+        if (this.selectedFiles && this.selectedFiles.length > 0) {
+            this.selectedFiles.forEach(file => {
+                formData.append('images', file);
+            });
         }
         return formData;
+    },
+
+    /**
+     * 更新图片预览缩略图网格
+     */
+    updateImagePreviews() {
+        const previewGrid = document.getElementById('previewGrid');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const uploadBox = document.getElementById('uploadBox');
+        if (!previewGrid) return;
+        
+        previewGrid.innerHTML = '';
+        
+        if (!this.selectedFiles || this.selectedFiles.length === 0) {
+            if (uploadPlaceholder) {
+                uploadPlaceholder.textContent = '📷 点击上传图片 (支持多张，可多次上传)';
+                uploadPlaceholder.classList.remove('hidden');
+            }
+            if (uploadBox) uploadBox.classList.remove('has-image');
+            return;
+        }
+        
+        if (uploadPlaceholder) {
+            uploadPlaceholder.textContent = '📷 继续添加图片...';
+            uploadPlaceholder.classList.remove('hidden'); // 决不隐藏，而是切换为紧凑文案
+        }
+        if (uploadBox) uploadBox.classList.add('has-image');
+        
+        this.selectedFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            
+            // 创建容器（比例为 1:1，隐藏溢出，有微阴影）
+            const container = document.createElement('div');
+            container.className = 'relative group border border-stone-200 bg-stone-50 p-1 flex justify-center items-center overflow-hidden transition-all';
+            container.style.aspectRatio = '1/1';
+            
+            // 预览图片
+            const img = document.createElement('img');
+            img.className = 'w-full h-full object-contain';
+            img.alt = file.name;
+            
+            // 独立删除按钮
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs font-bold shadow-md transition-colors';
+            removeBtn.innerHTML = '×';
+            removeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.selectedFiles.splice(index, 1);
+                this.updateImagePreviews();
+            });
+            
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+            previewGrid.appendChild(container);
+            
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
     },
 
     /**
@@ -48,12 +115,9 @@ const ui = {
         // 重置左侧表单
         document.getElementById('potteryForm').reset();
         
-        // 重置图片预览
-        const previewImage = document.getElementById('previewImage');
-        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-        previewImage.classList.add('hidden');
-        previewImage.src = '';
-        uploadPlaceholder.classList.remove('hidden');
+        // 重置多图缓存列表
+        this.selectedFiles = [];
+        this.updateImagePreviews();
 
         // 重置右侧视图
         const analysisResult = document.getElementById('analysisResult');
@@ -67,6 +131,41 @@ const ui = {
         if (welcome) welcome.classList.remove('hidden');
         
         analysisResult.className = "space-y-4";
+    },
+
+    /**
+     * 将获取到的后端测试示例数据回填表单
+     */
+    loadExampleData(data) {
+        document.getElementById('originalName').value = data.original_name || '';
+        document.getElementById('eraInput').value = data.era || '';
+        document.getElementById('cultureInput').value = data.culture || '';
+        document.getElementById('description').value = data.description || '';
+        
+        if (data.image_base64) {
+            try {
+                const file = this._dataURLtoFile(data.image_base64, data.image_filename || 'b1p22.png');
+                this.selectedFiles = [file];
+                this.updateImagePreviews();
+            } catch (e) {
+                console.error("还原物理示例图片失败:", e);
+            }
+        }
+    },
+
+    /**
+     * 辅助工具：将 Base64 dataURL 还原为标准的 HTML5 File 对象
+     */
+    _dataURLtoFile(dataurl, filename) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
     },
 
     /**
@@ -276,17 +375,11 @@ const ui = {
         }
 
         const sourceAttr = `data-source="${source}"`;
-        const sourceTextAttr = `data-source-text="${sourceText}"`;
+        const sourceTextAttr = `data-source-text="${sourceText || ''}"`;
 
         return `
-            <div class="element-value-box ${stateClass} group relative cursor-pointer hover:shadow-md transition-shadow" ${sourceAttr} ${sourceTextAttr}>
+            <div class="element-value-box ${stateClass} cursor-pointer hover:shadow-md transition-shadow" ${sourceAttr} ${sourceTextAttr}>
                 ${valueHtml}
-                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-stone-800 text-white text-xs px-3 py-2 rounded-md shadow-lg w-max max-w-[200px] whitespace-normal z-10 pointer-events-none">
-                    <p class="font-bold border-b border-stone-600 pb-1 mb-1">来源: ${source}</p>
-                    ${sourceText && sourceText !== 'null' ? `<p class="text-stone-300">"${sourceText}"</p>` : ''}
-                    <!-- 小三角形 -->
-                    <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-stone-800"></div>
-                </div>
             </div>
         `;
     },
@@ -318,19 +411,39 @@ const ui = {
     },
 
     /**
-     * 绑定悬浮高亮事件
+     * 绑定悬浮高亮事件与全局视口 Fixed 悬浮窗定位
      */
     _bindHoverHighlights() {
+        // 1. 确保全局唯一定位的悬浮窗 DOM 挂载在 body 根节点，以彻底突破局部 overflow 裁剪和滚动条限制
+        let globalTooltip = document.getElementById('global-tooltip');
+        if (!globalTooltip) {
+            globalTooltip = document.createElement('div');
+            globalTooltip.id = 'global-tooltip';
+            // 设置 position: fixed, z-50 极高层级, 经典的 stone-800 极简灰黑色背景和圆角细阴影
+            globalTooltip.className = 'fixed hidden bg-stone-800 text-white text-xs px-3 py-2 rounded-md shadow-lg z-50 w-max max-w-[220px] whitespace-normal pointer-events-none transition-opacity duration-150';
+            
+            // 向上指的小三角形，位于悬浮窗顶部中央
+            const arrow = document.createElement('div');
+            arrow.className = 'absolute bottom-full left-1/2 -translate-x-1/2 border-4 border-transparent border-b-stone-800';
+            
+            const content = document.createElement('div');
+            content.id = 'global-tooltip-content';
+            
+            globalTooltip.appendChild(arrow);
+            globalTooltip.appendChild(content);
+            document.body.appendChild(globalTooltip);
+        }
+
         const elements = document.querySelectorAll('.element-value-box[data-source]');
         elements.forEach(el => {
             el.addEventListener('mouseenter', () => {
                 const source = el.getAttribute('data-source');
                 const sourceText = el.getAttribute('data-source-text');
                 
+                // 2. 触发关联输入框的高亮逻辑
                 let targetInput = null;
                 if (source === '文字描述') {
                     targetInput = document.getElementById('description');
-                    // 如果有 sourceText，尝试在 textarea 内高亮文本
                     if (targetInput && sourceText && sourceText !== 'null') {
                         const val = targetInput.value;
                         const idx = val.indexOf(sourceText);
@@ -340,10 +453,7 @@ const ui = {
                         }
                     }
                 } else if (source === '结构化输入') {
-                    // 获取是年代还是文化，这个可能需要依赖 key，我们可以根据文字内容来判断，
-                    // 或者更好的做法是给 DOM 也绑定 data-key，但现在简单地根据值去两个 input 里找
                     const eraVal = document.getElementById('eraInput').value;
-                    const cultureVal = document.getElementById('cultureInput').value;
                     const elValue = el.textContent.trim();
                     if (elValue === eraVal) targetInput = document.getElementById('eraInput');
                     else targetInput = document.getElementById('cultureInput');
@@ -365,17 +475,49 @@ const ui = {
                     targetInput.classList.add('ring-4', 'ring-orange-500', 'transition-all', 'z-10', 'relative');
                     el._targetInput = targetInput;
                 }
+
+                // 3. 渲染全局悬浮窗内容
+                const contentDiv = globalTooltip.querySelector('#global-tooltip-content');
+                contentDiv.innerHTML = `
+                    <p class="font-bold border-b border-stone-600 pb-1 mb-1">来源: ${source}</p>
+                    ${sourceText && sourceText !== 'null' && sourceText !== 'undefined' ? `<p class="text-stone-300">"${sourceText}"</p>` : ''}
+                `;
+
+                // 4. 显式化展现以准确获取渲染宽高度
+                globalTooltip.classList.remove('hidden');
+
+                // 5. 动态计算视口坐标：定位到被触发要素的“正下方”
+                const rect = el.getBoundingClientRect();
+                const tooltipRect = globalTooltip.getBoundingClientRect();
+                
+                // 水平居中定位，垂直紧贴要素下边距外加 8px 间隙
+                let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                const top = rect.bottom + 8;
+
+                // 6. 视口边缘溢出守护策略：保证弹出框永远在屏幕左右边界内完整显现
+                const safetyPadding = 10;
+                if (left < safetyPadding) {
+                    left = safetyPadding;
+                } else if (left + tooltipRect.width > window.innerWidth - safetyPadding) {
+                    left = window.innerWidth - tooltipRect.width - safetyPadding;
+                }
+
+                globalTooltip.style.left = `${left}px`;
+                globalTooltip.style.top = `${top}px`;
             });
 
             el.addEventListener('mouseleave', () => {
+                // 恢复关联输入框状态
                 if (el._targetInput) {
                     el._targetInput.classList.remove('ring-4', 'ring-orange-500', 'transition-all', 'z-10', 'relative');
-                    // 如果是 description 或 originalName，移除高亮（失焦即可）
                     if (el._targetInput.id === 'description' || el._targetInput.id === 'originalName') {
                         el._targetInput.blur();
                     }
                     el._targetInput = null;
                 }
+
+                // 隐藏全局悬浮窗
+                globalTooltip.classList.add('hidden');
             });
         });
     }

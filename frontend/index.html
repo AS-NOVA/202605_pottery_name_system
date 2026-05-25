@@ -36,16 +36,16 @@
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
             <!-- ================= 左侧：信息输入区 ================= -->
             <div class="card xl:col-span-4">
-                <h2 class="section-title">1. 输入多源信息</h2>
+                <h2 class="section-title">输入多源信息</h2>
                 <form id="potteryForm" class="space-y-4">
                     <!-- 1. 图片上传 -->
                     <div>
-                        <label class="form-label">图片上传</label>
-                        <input type="file" id="imageInput" accept="image/*" class="hidden" />
+                        <label class="form-label">图片上传 (支持多图)</label>
+                        <input type="file" id="imageInput" accept="image/*" class="hidden" multiple />
                         <label id="uploadBox" for="imageInput" class="upload-box">
-                            <span id="uploadPlaceholder" class="text-stone-400 text-sm">📷 点击上传图片</span>
-                            <img id="previewImage" class="upload-preview hidden" alt="预览图片" />
+                            <span id="uploadPlaceholder" class="text-stone-400 text-sm">📷 点击上传图片 (支持多张，可多次上传)</span>
                         </label>
+                        <div id="previewGrid" class="grid grid-cols-3 gap-2 mt-2"></div>
                     </div>
                     <!-- 2. 原参考名 -->
                     <div>
@@ -53,18 +53,21 @@
                         <div class="flex gap-2">
                             <input type="text" id="originalName" placeholder="例如：马家窑文化黑彩网格纹壶" class="form-input flex-1">
                             <button type="button" id="btnParseName"
-                                class="bg-orange-900 text-stone-50 px-4 hover:bg-orange-800 transition-colors whitespace-nowrap">拆解原名</button>
+                                class="bg-orange-900 text-stone-50 px-4 hover:bg-orange-800 transition-colors whitespace-nowrap hidden">拆解原名</button>
                         </div>
                     </div>
                     <!-- 3. 结构化信息 -->
-                    <div class="flex gap-4">
-                        <div class="flex-1">
-                            <label class="form-label">时代</label>
-                            <input type="text" id="eraInput" placeholder="例如：新石器时代" class="form-input">
-                        </div>
-                        <div class="flex-1">
-                            <label class="form-label">所属文化</label>
-                            <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="form-input">
+                    <div>
+                        <label class="form-label">结构化信息</label>
+                        <div class="flex gap-4 p-4 border border-stone-200 rounded-md bg-stone-50/50">
+                            <div class="flex-1">
+                                <label class="block text-sm text-stone-600 mb-2">时代</label>
+                                <input type="text" id="eraInput" placeholder="例如：新石器时代" class="form-input">
+                            </div>
+                            <div class="flex-1">
+                                <label class="block text-sm text-stone-600 mb-2">所属文化</label>
+                                <input type="text" id="cultureInput" placeholder="例如：仰韶文化" class="form-input">
+                            </div>
                         </div>
                     </div>
                     <!-- 4. 文字描述 -->
@@ -74,27 +77,27 @@
                     </div>
 
                     <div class="space-y-4 mt-6">
+                        <button type="button" id="btnGenerateName" class="hidden">仅生成推荐命名</button>
                         <div class="flex gap-4">
-                            <button type="button" id="btnGenerateName"
-                                class="w-full bg-orange-700 text-stone-50 text-lg py-3 hover:bg-orange-600 transition-colors duration-200 flex-[2]">仅生成推荐命名</button>
+                            <button type="button" id="btnAnalyzeBoth"
+                                class="w-full bg-orange-900 text-stone-50 text-lg py-3 hover:bg-orange-800 transition-colors duration-200 font-bold flex-[2]">生成推荐命名</button>
+                            <button type="button" id="btnLoadExample"
+                                class="w-full bg-stone-200 text-stone-700 text-lg py-3 hover:bg-stone-300 transition-colors duration-200 flex-[1]">导入示例</button>
                             <button type="button" id="btnClearAll"
                                 class="w-full bg-stone-200 text-stone-700 text-lg py-3 hover:bg-stone-300 transition-colors duration-200 flex-[1]">清空</button>
                         </div>
-                        <button type="button" id="btnAnalyzeBoth" class="btn-primary font-bold">拆解原名并生成推荐命名</button>
-
                     </div>
                 </form>
             </div>
 
             <!-- ================= 右侧：结果展示区 ================= -->
             <div class="card xl:col-span-8">
-                <h2 class="section-title">2. 名称检查与命名结果</h2>
+                <h2 class="section-title">名称检查与命名结果</h2>
                 <div id="analysisResult" class="space-y-4">
                     <p id="welcomePlaceholder" class="text-stone-500 italic leading-relaxed">
-                        请在左侧填写原参考名、上传图片或输入其他结构化信息后，点击下方相应的分析按钮。<br><br>
-                        - 若需分析现有名称的组成，请点击 <b>“拆解原名”</b>。<br>
-                        - 若需让系统自动生成新的名字，请点击 <b>“生成推荐命名”</b>。<br>
-                        - 若需比对新老名称的差异，请点击 <b>“拆解原名并生成推荐命名”</b>。
+                        请在左侧上传图片、填写原参考名并输入其他结构化信息后，点击下方相应的分析按钮。<br><br>
+                        - 点击 <b>“拆解原名并生成推荐命名”</b>，系统将同时对原名进行拆解、并基于您提供的数据（包括多图特征）生成全新且带溯源的命名比对表。<br>
+                        - 点击 <b>“清空”</b> 可以重置所有输入和结果。
                     </p>
                 </div>
             </div>

@@ -30,5 +30,13 @@ const api = {
         }
         
         return await response.json();
+    },
+
+    async getExampleData() {
+        const response = await fetch('http://127.0.0.1:8000/api/example_data');
+        if (!response.ok) {
+            throw new Error(`获取示例数据失败: ${response.statusText}`);
+        }
+        return await response.json();
     }
 };

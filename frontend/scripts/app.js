@@ -16,65 +16,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnParseName = document.getElementById('btnParseName');
     const btnGenerateName = document.getElementById('btnGenerateName');
 
-    btnParseName.addEventListener('click', async () => {
-        const originalName = document.getElementById('originalName').value.trim();
-        if (!originalName) {
-            alert("请填写原参考名后再进行拆解分析");
-            return;
-        }
-
-        // 清除现有的 origin 状态并重新渲染，以达到清空视图的效果
-        for (let key in state) {
-            state[key].origin = null;
-        }
-        ui.renderResult(state, originalName);
-        ui.showLoading("正在拆解原名...");
-        
-        try {
-            const result = await api.parseOriginalName(originalName);
-            
-            // 更新状态中的 origin
-            for (let key in state) {
-                state[key].origin = result[key] !== undefined ? result[key] : null;
+    if (btnParseName) {
+        btnParseName.addEventListener('click', async () => {
+            const originalName = document.getElementById('originalName').value.trim();
+            if (!originalName) {
+                alert("请填写原参考名后再进行拆解分析");
+                return;
             }
-            
-            ui.renderResult(state, originalName);
 
-        } catch (error) {
-            console.error('Error:', error);
-            ui.showError(error);
-        } finally {
-            ui.hideLoading();
-        }
-    });
-
-    btnGenerateName.addEventListener('click', async () => {
-        // 清除现有的 new 状态并重新渲染，以达到清空视图的效果
-        for (let key in state) {
-            state[key].new = null;
-        }
-        const originalName = document.getElementById('originalName').value.trim();
-        ui.renderResult(state, originalName);
-        ui.showLoading("正在生成推荐命名...");
-        
-        try {
-            const formData = ui.getFormData();
-            const result = await api.generateRecommendedName(formData);
-            
-            // 更新状态中的 new
+            // 清除现有的 origin 状态并重新渲染，以达到清空视图的效果
             for (let key in state) {
-                state[key].new = result[key] !== undefined ? result[key] : null;
+                state[key].origin = null;
             }
-            
             ui.renderResult(state, originalName);
+            ui.showLoading("正在拆解原名...");
+            
+            try {
+                const result = await api.parseOriginalName(originalName);
+                
+                // 更新状态中的 origin
+                for (let key in state) {
+                    state[key].origin = result[key] !== undefined ? result[key] : null;
+                }
+                
+                ui.renderResult(state, originalName);
 
-        } catch (error) {
-            console.error('Error:', error);
-            ui.showError(error);
-        } finally {
-            ui.hideLoading();
-        }
-    });
+            } catch (error) {
+                console.error('Error:', error);
+                ui.showError(error);
+            } finally {
+                ui.hideLoading();
+            }
+        });
+    }
+
+    if (btnGenerateName) {
+        btnGenerateName.addEventListener('click', async () => {
+            // 清除现有的 new 状态并重新渲染，以达到清空视图的效果
+            for (let key in state) {
+                state[key].new = null;
+            }
+            const originalName = document.getElementById('originalName').value.trim();
+            ui.renderResult(state, originalName);
+            ui.showLoading("正在生成推荐命名...");
+            
+            try {
+                const formData = ui.getFormData();
+                const result = await api.generateRecommendedName(formData);
+                
+                // 更新状态中的 new
+                for (let key in state) {
+                    state[key].new = result[key] !== undefined ? result[key] : null;
+                }
+                
+                ui.renderResult(state, originalName);
+
+            } catch (error) {
+                console.error('Error:', error);
+                ui.showError(error);
+            } finally {
+                ui.hideLoading();
+            }
+        });
+    }
 
     const btnAnalyzeBoth = document.getElementById('btnAnalyzeBoth');
     if (btnAnalyzeBoth) {
@@ -129,6 +133,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             // 清空UI
             ui.clearUI();
+        });
+    }
+
+    const btnLoadExample = document.getElementById('btnLoadExample');
+    if (btnLoadExample) {
+        btnLoadExample.addEventListener('click', async () => {
+            ui.showLoading("正在导入测试示例数据...");
+            try {
+                const data = await api.getExampleData();
+                ui.loadExampleData(data);
+            } catch (error) {
+                console.error('导入示例数据出错:', error);
+                alert(`导入示例失败：${error.message}`);
+            } finally {
+                ui.hideLoading();
+            }
         });
     }
 });

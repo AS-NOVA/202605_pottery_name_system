@@ -73,10 +73,22 @@
     min-height: 44px;
 }
 
-/* --- 五种状态的视觉映射 (两行设计) --- */
+/* --- 五种比对状态的视觉映射 (高质感扁平重构版) --- */
 
-/* 1. 确认 (Match) - 上下绿 */
-.state-match-top, .state-match-bottom {
+/* 常态中性样式：原名在非冲突情况下的基准样式，极低视觉噪音 */
+.state-neutral {
+    border-color: #e7e5e4;
+    color: #57534e;
+    background-color: #f5f5f4;
+}
+
+/* 1. 确认 (Match) - 原名常态，推荐名确认绿 */
+.state-match-top {
+    border-color: #e7e5e4;
+    color: #57534e;
+    background-color: #f5f5f4;
+}
+.state-match-bottom {
     border-color: #52c41a;
     color: #52c41a;
     background-color: #f6ffed;
@@ -87,33 +99,33 @@
     margin-left: 4px;
 }
 
-/* 2. 纠正 (Mismatch) - 上灰带删除线，下红 */
+/* 2. 纠正 (Mismatch) - 原名高亮红底红字+删除线，推荐名高亮绿底绿字 */
 .state-mismatch-top {
-    border-color: #d9d9d9;
-    color: #8c8c8c;
-    background-color: #f5f5f5;
-    text-decoration: line-through;
-}
-.state-mismatch-bottom {
     border-color: #f5222d;
     color: #f5222d;
     background-color: #fff1f0;
+    text-decoration: line-through;
+}
+.state-mismatch-bottom {
+    border-color: #52c41a;
+    color: #52c41a;
+    background-color: #f6ffed;
 }
 
-/* 3. 沿用 (Unverified) - 上下深灰继承 */
+/* 3. 沿用 (Unverified) - 原名常态，推荐名沿用虚线框 */
 .state-unverified-top {
-    border-color: #595959;
-    color: #595959;
-    background-color: #fafafa;
+    border-color: #e7e5e4;
+    color: #57534e;
+    background-color: #f5f5f4;
 }
 .state-unverified-bottom {
-    border-color: #8c8c8c;
+    border-color: #cbd5e1;
     border-style: dashed;
-    color: #595959;
-    background-color: #fafafa;
+    color: #64748b;
+    background-color: #f8fafc;
 }
 
-/* 4. 补充 (Added) - 上空缺，下绿 */
+/* 4. 补充 (Added) - 原名空缺，推荐名高亮绿底绿字并前缀加号 */
 .state-added-bottom {
     border-color: #52c41a;
     color: #52c41a;
@@ -125,9 +137,9 @@
     margin-right: 2px;
 }
 
-/* 5. 空缺 (Empty) - 上下空缺 */
+/* 5. 空缺 (Empty) - 统一的中性空缺虚线灰色 */
 .state-empty {
-    border-color: #d9d9d9;
+    border-color: #e7e5e4;
     border-style: dashed;
     color: #bfbfbf;
     background-color: transparent;
